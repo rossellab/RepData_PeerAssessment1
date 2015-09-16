@@ -1,6 +1,7 @@
 # Reproducible Research: Peer Assessment 1
 
 
+
 ## Loading and preprocessing the data
 
 First of all I unzip the data file, then I load the data. The interval is read as integer, I transform it into a four-character string with lead zeros, then create a time variable including date and time interval. I also transform the date variable into date format.
@@ -8,6 +9,7 @@ First of all I unzip the data file, then I load the data. The interval is read a
 
 
 ```r
+opts_chunk$set(echo = TRUE) 
 unzip("activity.zip")
 data <- read.csv("activity.csv", stringsAsFactors = FALSE)
 data$time <- sprintf("%04d",data$interval)
@@ -36,10 +38,10 @@ hist(totSteps, col = "grey", main = "Histogram of total steps per day", xlab = "
 abline(v = mean, col = "red")
 abline(v = median, col = "blue")
 text(mean, 20, paste("mean = ", round(mean, digits = 2)), pos = 2, col = "red")
-text(median, 20, paste("median = ", as.integer(median)), pos = 4, col = "blue")
+text(median, 20, paste("median = ", round(median, digits = 2)), pos = 4, col = "blue")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
 
 ## What is the average daily activity pattern?
 
@@ -52,7 +54,7 @@ par(cex = 0.8, cex.main = 0.9)
 plot (data$time[1:288], averageSteps, type="l", xlab = "Time of the day", ylab = "Average number of steps", main = "Average daily activity pattern")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
 
 ## Imputing missing values
 
@@ -106,7 +108,7 @@ meanNew <- mean(totStepsNew)
 medianNew <- median(totStepsNew)
 ```
 
-I plot an histogram of total steps per day including imputed values, and I add a red vertical line at the **mean value (1.076619\times 10^{4})** and a blue vertical line at the **median value (1.0766189\times 10^{4})**.
+I plot an histogram of total steps per day including imputed values, and I add a red vertical line at the mean value and a blue vertical line at the median value.
 
 
 ```r
@@ -115,10 +117,10 @@ hist(totStepsNew, col = "grey", main = "Histogram of total steps per day", xlab 
 abline(v = meanNew, col = "red")
 abline(v = medianNew, col = "blue")
 text(meanNew, 20, paste("mean = ", round(meanNew, digits = 2)), pos = 2, col = "red")
-text(medianNew, 20, paste("median = ", as.integer(medianNew)), pos = 4, col = "blue")
+text(medianNew, 20, paste("median = ", round(medianNew, digits = 2)), pos = 4, col = "blue")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-10-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-11-1.png) 
 
 Compared to the histogram of question 1, where NA's where ignored, the new histogram presents a higher peak at the mean and median values, that are now almost identical as well. Besides, in the new histogram there are much less occurrences of 0-5000 steps per day. The rest of the distribution has remained basically the same.
 
@@ -144,4 +146,4 @@ plot (dataNew$time[1:288], daytypeSteps[,1], type="l", xlab = "Time of the day",
 plot (dataNew$time[1:288], daytypeSteps[,2], type="l", xlab = "Time of the day", ylab = "Average number of steps", main = "Average daily activity pattern during the weekend")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-12-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-13-1.png) 

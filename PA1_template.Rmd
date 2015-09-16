@@ -5,6 +5,10 @@ output:
     keep_md: true
 ---
 
+```{r echo = FALSE}
+library("knitr")
+opts_chunk$set(scipen = 999, digits = 2)
+```
 
 ## Loading and preprocessing the data
 
@@ -12,6 +16,7 @@ First of all I unzip the data file, then I load the data. The interval is read a
 
 
 ```{r echo = TRUE}
+opts_chunk$set(echo = TRUE) 
 unzip("activity.zip")
 data <- read.csv("activity.csv", stringsAsFactors = FALSE)
 data$time <- sprintf("%04d",data$interval)
@@ -38,7 +43,7 @@ hist(totSteps, col = "grey", main = "Histogram of total steps per day", xlab = "
 abline(v = mean, col = "red")
 abline(v = median, col = "blue")
 text(mean, 20, paste("mean = ", round(mean, digits = 2)), pos = 2, col = "red")
-text(median, 20, paste("median = ", as.integer(median)), pos = 4, col = "blue")
+text(median, 20, paste("median = ", round(median, digits = 2)), pos = 4, col = "blue")
 ```
 
 ## What is the average daily activity pattern?
@@ -90,7 +95,7 @@ meanNew <- mean(totStepsNew)
 medianNew <- median(totStepsNew)
 ```
 
-I plot an histogram of total steps per day including imputed values, and I add a red vertical line at the **mean value (`r round(meanNew, digits = 2)`)** and a blue vertical line at the **median value (`r medianNew`)**.
+I plot an histogram of total steps per day including imputed values, and I add a red vertical line at the mean value and a blue vertical line at the median value.
 
 ```{r echo=TRUE}
 par(cex = 0.8, cex.main = 0.9)
@@ -98,7 +103,7 @@ hist(totStepsNew, col = "grey", main = "Histogram of total steps per day", xlab 
 abline(v = meanNew, col = "red")
 abline(v = medianNew, col = "blue")
 text(meanNew, 20, paste("mean = ", round(meanNew, digits = 2)), pos = 2, col = "red")
-text(medianNew, 20, paste("median = ", as.integer(medianNew)), pos = 4, col = "blue")
+text(medianNew, 20, paste("median = ", round(medianNew, digits = 2)), pos = 4, col = "blue")
 ```
 
 Compared to the histogram of question 1, where NA's where ignored, the new histogram presents a higher peak at the mean and median values, that are now almost identical as well. Besides, in the new histogram there are much less occurrences of 0-5000 steps per day. The rest of the distribution has remained basically the same.
