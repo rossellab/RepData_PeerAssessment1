@@ -9,11 +9,10 @@ First of all I unzip the data file, then I load the data. The interval is read a
 
 
 ```r
-opts_chunk$set(echo = TRUE) 
 unzip("activity.zip")
 data <- read.csv("activity.csv", stringsAsFactors = FALSE)
-data$time <- sprintf("%04d",data$interval)
-data$time <- paste(data$date," ",data$time)
+data$time <- sprintf("%04d", data$interval)
+data$time <- paste(data$date, " ", data$time)
 data$time <- strptime(data$time, format = "%Y-%m-%d %H%M")
 data$date <- as.Date(data$date)
 ```
@@ -41,7 +40,7 @@ text(mean, 20, paste("mean = ", round(mean, digits = 2)), pos = 2, col = "red")
 text(median, 20, paste("median = ", round(median, digits = 2)), pos = 4, col = "blue")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
 
 ## What is the average daily activity pattern?
 
@@ -51,10 +50,11 @@ I compute the average steps per interval across the days and I plot a time serie
 ```r
 averageSteps <- tapply(data$steps, data$interval, mean, na.rm = TRUE)
 par(cex = 0.8, cex.main = 0.9)
-plot (data$time[1:288], averageSteps, type="l", xlab = "Time of the day", ylab = "Average number of steps", main = "Average daily activity pattern")
+plot (data$time[1:288], averageSteps, type="l", xlab = "Time of the day", ylab = "Average number of steps", 
+      main = "Average daily activity pattern")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
 
 ## Imputing missing values
 
@@ -108,7 +108,7 @@ meanNew <- mean(totStepsNew)
 medianNew <- median(totStepsNew)
 ```
 
-I plot an histogram of total steps per day including imputed values, and I add a red vertical line at the mean value and a blue vertical line at the median value.
+I plot an histogram of total steps per day including imputed values, and I add a red vertical line at the **mean value (10766.19)** and a blue vertical line at the **median value (10766.19)**.
 
 
 ```r
@@ -120,7 +120,7 @@ text(meanNew, 20, paste("mean = ", round(meanNew, digits = 2)), pos = 2, col = "
 text(medianNew, 20, paste("median = ", round(medianNew, digits = 2)), pos = 4, col = "blue")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-11-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-10-1.png) 
 
 Compared to the histogram of question 1, where NA's where ignored, the new histogram presents a higher peak at the mean and median values, that are now almost identical as well. Besides, in the new histogram there are much less occurrences of 0-5000 steps per day. The rest of the distribution has remained basically the same.
 
@@ -131,7 +131,8 @@ I create a factor variable based on the variable "date" in my new dataset, and I
 
 ```r
 dataNew$weekday <- weekdays(data$date)
-dataNew$daytype <- sub("Monday|Tuesday|Wednesday|Thursday|Friday", "Weekday", dataNew$weekday, ignore.case = TRUE)
+dataNew$daytype <- sub("Monday|Tuesday|Wednesday|Thursday|Friday", "Weekday", 
+                       dataNew$weekday, ignore.case = TRUE)
 dataNew$daytype <- sub("Saturday|Sunday", "Weekend", dataNew$daytype, ignore.case = TRUE)
 dataNew$daytype <- as.factor(dataNew$daytype)
 ```
@@ -142,8 +143,10 @@ Then I make a panel plot of the daily pattern during weekdays and in the weekend
 ```r
 daytypeSteps <- tapply(dataNew$steps, list(dataNew$interval, dataNew$daytype), mean, na.rm = TRUE)
 par(mfrow = c(2,1), cex = 0.8, cex.main = 0.9)
-plot (dataNew$time[1:288], daytypeSteps[,1], type="l", xlab = "Time of the day", ylab = "Average number of steps", main = "Average daily activity pattern during weekdays")
-plot (dataNew$time[1:288], daytypeSteps[,2], type="l", xlab = "Time of the day", ylab = "Average number of steps", main = "Average daily activity pattern during the weekend")
+plot (dataNew$time[1:288], daytypeSteps[,1], type="l", xlab = "Time of the day", 
+      ylab = "Average number of steps", main = "Average daily activity pattern during weekdays")
+plot (dataNew$time[1:288], daytypeSteps[,2], type="l", xlab = "Time of the day", 
+      ylab = "Average number of steps", main = "Average daily activity pattern during the weekend")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-13-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-12-1.png) 

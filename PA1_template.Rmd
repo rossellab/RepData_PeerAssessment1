@@ -5,9 +5,8 @@ output:
     keep_md: true
 ---
 
-```{r echo = FALSE}
-library("knitr")
-opts_chunk$set(scipen = 999, digits = 2)
+```{r global_options, echo = FALSE}
+options(scipen = 999, digits = 2, echo = TRUE)
 ```
 
 ## Loading and preprocessing the data
@@ -16,11 +15,10 @@ First of all I unzip the data file, then I load the data. The interval is read a
 
 
 ```{r echo = TRUE}
-opts_chunk$set(echo = TRUE) 
 unzip("activity.zip")
 data <- read.csv("activity.csv", stringsAsFactors = FALSE)
-data$time <- sprintf("%04d",data$interval)
-data$time <- paste(data$date," ",data$time)
+data$time <- sprintf("%04d", data$interval)
+data$time <- paste(data$date, " ", data$time)
 data$time <- strptime(data$time, format = "%Y-%m-%d %H%M")
 data$date <- as.Date(data$date)
 ```
@@ -35,7 +33,7 @@ mean <- mean(totSteps)
 median <- median(totSteps)
 ```
 
-I plot an histogram of total steps per day, and I add a red vertical line at the **mean value (`r round(mean, digits = 2)`)** and a blue vertical line at the **median value (`r median`)**.
+I plot an histogram of total steps per day, and I add a red vertical line at the **mean value (`r mean`)** and a blue vertical line at the **median value (`r median`)**.
 
 ```{r echo=TRUE}
 par(cex = 0.8, cex.main = 0.9)
@@ -53,7 +51,8 @@ I compute the average steps per interval across the days and I plot a time serie
 ```{r echo = TRUE}
 averageSteps <- tapply(data$steps, data$interval, mean, na.rm = TRUE)
 par(cex = 0.8, cex.main = 0.9)
-plot (data$time[1:288], averageSteps, type="l", xlab = "Time of the day", ylab = "Average number of steps", main = "Average daily activity pattern")
+plot (data$time[1:288], averageSteps, type="l", xlab = "Time of the day", ylab = "Average number of steps", 
+      main = "Average daily activity pattern")
 ```
 
 ## Imputing missing values
@@ -95,7 +94,7 @@ meanNew <- mean(totStepsNew)
 medianNew <- median(totStepsNew)
 ```
 
-I plot an histogram of total steps per day including imputed values, and I add a red vertical line at the mean value and a blue vertical line at the median value.
+I plot an histogram of total steps per day including imputed values, and I add a red vertical line at the **mean value (`r meanNew`)** and a blue vertical line at the **median value (`r medianNew`)**.
 
 ```{r echo=TRUE}
 par(cex = 0.8, cex.main = 0.9)
@@ -114,7 +113,8 @@ I create a factor variable based on the variable "date" in my new dataset, and I
 
 ```{r echo = TRUE}
 dataNew$weekday <- weekdays(data$date)
-dataNew$daytype <- sub("Monday|Tuesday|Wednesday|Thursday|Friday", "Weekday", dataNew$weekday, ignore.case = TRUE)
+dataNew$daytype <- sub("Monday|Tuesday|Wednesday|Thursday|Friday", "Weekday", 
+                       dataNew$weekday, ignore.case = TRUE)
 dataNew$daytype <- sub("Saturday|Sunday", "Weekend", dataNew$daytype, ignore.case = TRUE)
 dataNew$daytype <- as.factor(dataNew$daytype)
 ```
@@ -124,6 +124,8 @@ Then I make a panel plot of the daily pattern during weekdays and in the weekend
 ```{r echo = TRUE}
 daytypeSteps <- tapply(dataNew$steps, list(dataNew$interval, dataNew$daytype), mean, na.rm = TRUE)
 par(mfrow = c(2,1), cex = 0.8, cex.main = 0.9)
-plot (dataNew$time[1:288], daytypeSteps[,1], type="l", xlab = "Time of the day", ylab = "Average number of steps", main = "Average daily activity pattern during weekdays")
-plot (dataNew$time[1:288], daytypeSteps[,2], type="l", xlab = "Time of the day", ylab = "Average number of steps", main = "Average daily activity pattern during the weekend")
+plot (dataNew$time[1:288], daytypeSteps[,1], type="l", xlab = "Time of the day", 
+      ylab = "Average number of steps", main = "Average daily activity pattern during weekdays")
+plot (dataNew$time[1:288], daytypeSteps[,2], type="l", xlab = "Time of the day", 
+      ylab = "Average number of steps", main = "Average daily activity pattern during the weekend")
 ```
